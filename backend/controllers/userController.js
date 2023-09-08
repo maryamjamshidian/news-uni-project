@@ -18,7 +18,11 @@ export const Register = async (req, res) => {
   const hashPassword= await bcrypt.hash(password,salt);
 
   try {
-await Users.create({
+    const found=await Users.findOne({where:{email:email}})
+if(found){
+  return res.json("ایمیل قبلا ثبت شده")
+}
+    await Users.create({
   name:name,
   email:email,
   password:hashPassword,
@@ -31,3 +35,11 @@ res.json("ثبت نام موفقیت آمیر بود")
     console.log(error);
   }
 };
+
+export const Login=async(req,res)=>{
+  try {
+    res.json("login")
+  } catch (error) {
+    console.log(error);
+  }
+}
