@@ -11,6 +11,7 @@ export const verifyToken = (req, res, next) => {
      if(token == null) return res.status(401).json("شما باید ابتدا وارد حساب کاربری خود شوید")
      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=> {
           if(err) return res.json("توکن منقضی شده است")
+          req.userId = decoded.userId
           next();
      })
 }
