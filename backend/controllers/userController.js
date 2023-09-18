@@ -221,3 +221,21 @@ export const updateProfile = async(req,res)=>{
   }
 
 }
+
+export const Profile = async(req,res)=>{
+  try {
+    const id = req.userId;
+    const user = await Users.findByPk(id)
+    if(user){
+      res.json({
+        id: user.id,
+        name: user.name,
+        url: user.url
+      })
+    }else{
+      res.json({error: "کاربر پیدا نشد"})
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
