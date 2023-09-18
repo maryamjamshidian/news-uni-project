@@ -110,3 +110,70 @@ export const Logout = async(req,res)=> {
     console.log(error);
   }
 }
+
+
+export const deleteUser = async(req, res)=>{
+  const user = await Users.findOne({
+    where: {
+      id: req.params.id
+    }
+  })
+  if(!user) return res.json({message: "این کاربر پیدا نشد"})
+  try {
+    await Users.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+    res.json({message: "کاربر با موفقیت حذف شد"})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
+export const updateUser = async (req,res) =>{
+  const {name, email, password, confPassword, isAdmin} = req.body;
+  if(password !== confPassword){
+    return res.json({error: "پسوورد و تکرار آن با هم برابر نیستند"})
+  }
+  const salt = await bcrypt.genSalt();
+  const hashPassword = await bcrypt.hash(password, salt)
+  try {
+    
+    await Users.update({
+      name: name,
+      email: email,
+      password: hashPassword,
+      isAdmin: isAdmin
+    },{
+      where: {
+        id: req.body.id
+      }
+    })
+
+
+    res.json({message: "ویرایش موفقیت آمیز بود"})
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const updateProfile = async(req,res)=>{
+  const avatar = await Users.findOne({
+    where: {
+      id: req.params.id
+    }
+  })
+
+  if(!avatar) return res.status(404).json({msg: "کاربری پیدا نشد"})
+  
+  let fileName = "";
+  if(req.files === null){
+    fileName = avatar.image
+  }else{
+    
+  }
+} 
