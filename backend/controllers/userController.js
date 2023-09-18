@@ -1,7 +1,8 @@
 import Users from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import path from "path"
+import fs from "fs";
 export const getAllUsers = async (req, res) => {
   try {
     const users =  await Users.findAll({});
@@ -161,6 +162,8 @@ export const updateUser = async (req,res) =>{
   }
 }
 
+
+
 export const updateProfile = async(req,res)=>{
   const avatar = await Users.findOne({
     where: {
@@ -174,6 +177,47 @@ export const updateProfile = async(req,res)=>{
   if(req.files === null){
     fileName = avatar.image
   }else{
+    const file = req.files.file
+    const fileSize = file.data.length;
+    const ext = path.extname(file.name)
+    let dateNow = Math.round(Date.now());
+    fileName = dateNow + ext
+    const allowedType = ['.png','.jpg','.jpeg'];
+    if(!allowedType.includes(ext.toLowerCase())){
+      return res.json("jpeg jpg png عکس معتبر نیست * فرمت های مجاز ") 
+    }
+    if(fileSize > 1000000) return res.json("حجم عکس نباید بیشتر از 1 مگابایت باشد")
     
+    if(avatar.image){
+      const filePath = `./public/avatars/${avatar.image}`
+      fs.unlinkSync(filePath)
+    }
+
+
+    file.mv(`./public/avatars/${fileName}`, (err)=> {
+      if(err) return res.json({msg: err.message})
+    })
   }
-} 
+
+  const {name , password, confPassword} = req.body;
+  if(password !== confPassword) {
+    return res.json({error: "پسوورد و تکرار آن با هم برابر نیست"})
+  }
+
+  const salt = await bcrypt.genSalt();
+  const hashPassword = await bcrypt.hash(password, salt)
+
+  const url = `${req.protocol}://${req.get("host")}/avatars/${fileName}`
+
+  try {
+    await Users.update({name: name, password: hashPassword, image: fileName, url: url},{
+      where: {
+        id: req.params.id
+      }
+    })
+    res.json({msg: "کاربر با موفقیت ویرایش شد"})
+  } catch (error) {
+    console.log(error);
+  }
+
+}
