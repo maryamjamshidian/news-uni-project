@@ -1,5 +1,15 @@
 import path from "path"
 import Video from "../models/videoModel.js";
+import fs from "fs"
+export const getAlllVideo = async(req, res)=> {
+     try {
+          const videos = await Video.findAll({});
+          res.json(videos)
+     } catch (error) {
+          console.log(error);
+     }
+}
+
 
 export const createVideo = async(req,res)=>{
     
@@ -25,4 +35,38 @@ export const createVideo = async(req,res)=>{
                     console.log(err.message);
                }
          })
+}
+
+export const getSingleVideo = async(req,res)=>{
+     try {
+          const video = await Video.findOne({order: [['createdAt', "DESC"]]})
+          res.json(video)
+     } catch (error) {
+          console.log(error);
+     }
+}
+
+
+export const deleteVideo = async(req,res) =>{
+     const video = await Video.findOne({
+          where: {
+               id: req.params.id
+          }
+     })
+     
+     if(!video) return res.json({msg: "ویدیو پیدا نشد."})
+
+     try {
+          const filePath = `./public/videos/${video.video}`
+          fs.unlinkSync(filePath)
+          await Video.destroy({
+               where: {
+                    id: req.params.id
+               }
+          })
+
+          res.json({msg: "ویدیو با موفقیت حذف شد"})
+     } catch (error) {
+          console.log(error)
+     }
 }
