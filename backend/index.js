@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 import categoryRoutes from "./routes/categoryRoute.js"
 import videoRoutes from "./routes/videoRoutes.js"
+import newsRoutes from "./routes/newsRoute.js"
 
 dotenv.config();
 const app = express();
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use(userRoutes);
 app.use(categoryRoutes);
 app.use(videoRoutes);
+app.use(newsRoutes);
 
 
 
