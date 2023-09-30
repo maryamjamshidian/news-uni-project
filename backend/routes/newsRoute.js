@@ -1,9 +1,10 @@
 import express from "express"
-import { createNews, deleteNews, getNews, getNewsById, updateNews } from "../controllers/NewsController.js"
+import { createNews, deleteNews, getLastNews, getNews, getNewsById, updateNews } from "../controllers/NewsController.js"
 import {verifyToken} from "../middleware/VerifyTokne.js"
 
 const router = express.Router()
 
+router.get("/api/news/lastnews", getLastNews)
 
 
 router.get("/api/news", verifyToken, getNews)
