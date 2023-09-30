@@ -1,6 +1,7 @@
 import News from "../models/newsModel.js";
 import path from "path";
 import fs from "fs";
+import Category from "../models/categoryModel.js";
 export const getNews = async (req, res) => {
   try {
     const news = await News.findAll({});
@@ -146,3 +147,17 @@ export const deleteNews = async(req,res)=>{
      }
    };
    
+
+
+   export const getLastNews = async(req,res)=>{
+     try {
+       const news = await News.findAll({
+         limit: 2,
+         order: [["id", "DESC"]],
+         include: [Category]
+       })
+       res.json(news)
+     } catch (error) {
+       console.log(error);
+     }
+   }
