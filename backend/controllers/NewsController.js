@@ -161,3 +161,25 @@ export const deleteNews = async(req,res)=>{
        console.log(error);
      }
    }
+
+
+   export const getDetailNews = async(req,res)=>{
+    try {
+      const response = await News.findOne({
+        where: {
+          id: req.params.id,
+        }
+      })
+  
+      const numViews = response.numViews + 1;
+      await News.update({numViews}, {
+        where: {
+          id: req.params.id
+        }
+      })
+  
+      res.json(response)
+    } catch (error) {
+      console.log(error);
+    }
+  }
