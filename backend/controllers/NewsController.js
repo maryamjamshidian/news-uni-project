@@ -2,6 +2,7 @@ import News from "../models/newsModel.js";
 import path from "path";
 import fs from "fs";
 import Category from "../models/categoryModel.js";
+import Users from "../models/userModel.js";
 export const getNews = async (req, res) => {
   try {
     const news = await News.findAll({});
@@ -125,61 +126,99 @@ export const updateNews = async (req, res) => {
 
 
 export const deleteNews = async(req,res)=>{
-     const news = await News.findOne({
-       where:{
-         id: req.params.id
-       }
-     })
-   
-     if(!news) return res.json({msg: "این خبر پیدا نشد"})
-   
-     try {
-         const filePath = `./public/images/${news.image}`;
-         fs.unlinkSync(filePath)
-         await News.destroy({
-           where: {
-             id: req.params.id
-           }
-         })
-         res.json({msg: "خبر با موفقیت حذف شد"})
-     } catch (error) {
-       console.log(error);
-     }
-   };
-   
+  const news = await News.findOne({
+    where:{
+      id: req.params.id
+    }
+  })
 
+  if(!news) return res.json({msg: "این خبر پیدا نشد"})
 
-   export const getLastNews = async(req,res)=>{
-     try {
-       const news = await News.findAll({
-         limit: 2,
-         order: [["id", "DESC"]],
-         include: [Category]
-       })
-       res.json(news)
-     } catch (error) {
-       console.log(error);
-     }
-   }
-
-
-   export const getDetailNews = async(req,res)=>{
-    try {
-      const response = await News.findOne({
-        where: {
-          id: req.params.id,
-        }
-      })
-  
-      const numViews = response.numViews + 1;
-      await News.update({numViews}, {
+  try {
+      const filePath = `./public/images/${news.image}`;
+      fs.unlinkSync(filePath)
+      await News.destroy({
         where: {
           id: req.params.id
         }
       })
-  
-      res.json(response)
-    } catch (error) {
-      console.log(error);
-    }
+      res.json({msg: "خبر با موفقیت حذف شد"})
+  } catch (error) {
+    console.log(error);
   }
+}
+
+
+export const getLastNews = async(req,res)=>{
+  try {
+    const news = await News.findAll({
+      limit: 2,
+      order: [["id", "DESC"]],
+      include: [Category]
+    })
+    res.json(news)
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getDetailNews = async(req,res)=>{
+  try {
+    const response = await News.findOne({
+      where: {
+        id: req.params.id,
+      }
+    })
+
+    const numViews = response.numViews + 1;
+    await News.update({numViews}, {
+      where: {
+        id: req.params.id
+      }
+    })
+
+    res.json(response)
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export const popularNews = async(req,res)=>{
+  try {
+    const news = await News.findAll({
+      limit: 4,
+      order: [["numViews", "DESC"]],
+      include: [{
+        model: Users,
+        attributes: ['id', 'name', 'email', 'url']
+      }]
+    })
+    res.json(news);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
+export const getCatNews = async(req, res)=>{
+  try {
+    const hasCategory = req.query.cat
+    
+    const news = hasCategory ?
+      await News.findAll({
+        where: {catId: hasCategory},
+        order: ["id", "DESC"]
+      })
+    :
+    await News.findAll({
+      order: ["id", "DESC"]
+    })
+
+    res.json(news)
+
+  } catch (error) {
+    console.log(error);
+  }
+}
