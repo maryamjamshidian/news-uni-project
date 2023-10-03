@@ -8,6 +8,7 @@ import categoryRoutes from "./routes/categoryRoute.js"
 import videoRoutes from "./routes/videoRoutes.js"
 import newsRoutes from "./routes/newsRoute.js"
 import commentRoutes from "./routes/commentRoute.js"
+import sendEmailRoutes from "./routes/sendEmailRouter.js"
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,7 @@ app.use(categoryRoutes);
 app.use(videoRoutes);
 app.use(newsRoutes);
 app.use(commentRoutes);
+app.use(sendEmailRoutes);
 
 
 
