@@ -62,3 +62,44 @@ export const deleteComment = async(req,res)=> {
           res.json(error)
      }
 }
+
+
+
+
+export const active = async(req, res) => {
+     const {isActive} = req.body;
+     try {
+         await Comments.update({isActive: isActive}, {
+              where: {
+                   id: req.params.id
+              }
+         })
+         res.json("نظر فعال شد.")
+     } catch (error) {
+          res.json(error)
+     }
+}
+
+export const unActive = async(req,res)=> {
+     const {isActive} = req.body;
+     try {
+          await Comments.update({isActive: isActive}, {
+               where: {
+                    id: req.params.id
+               }
+          })
+          res.json("نظر غیر فعال شد.")
+      } catch (error) {
+           res.json(error)
+      }
+}
+
+export const getComment = async(req,res)=> {
+     try {
+          const newsId = req.params.newsId;
+          const comments = await Comments.findAll({where: {newsId: newsId}})
+          res.json(comments)
+     } catch (error) {
+          res.json(error)
+     }
+}
