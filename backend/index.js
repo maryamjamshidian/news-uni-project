@@ -9,6 +9,7 @@ import videoRoutes from "./routes/videoRoutes.js"
 import newsRoutes from "./routes/newsRoute.js"
 import commentRoutes from "./routes/commentRoute.js"
 import sendEmailRoutes from "./routes/sendEmailRouter.js"
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,7 @@ try {
 } catch (error) {
   console.log(error);
 }
+app.use(cors({credentials: true, origin: "http://localhost:3000"}))
 app.use(express.json());
 app.use(fileUpload());
 app.use(express.static("public"))
