@@ -13,7 +13,7 @@ const formSchema = Yup.object({
 
 const Login = () => {
 
-     const {login} = useContext(AuthContext)
+     const {login,error} = useContext(AuthContext)
 
      const formik = useFormik({
           initialValues: {
@@ -24,7 +24,7 @@ const Login = () => {
                login(values);
           },
           validationSchema: formSchema
-     })
+ })
 
      
   return (
@@ -35,8 +35,11 @@ const Login = () => {
           <div className="columns is-centered">
             <div className="column is-4">
               <form className="box" onSubmit={formik.handleSubmit}>
-                <h1 className="title has-tex-centered mb-5">
+                <h1 className="title has-text-centered mb-5">
                   ورود به پنل مدیریت
+                </h1>
+                <h1 className="has-text-centered has-text-danger py-3">
+                  {error}
                 </h1>
                 <div className="field">
                   <label className="label">ایمیل</label>
