@@ -1,18 +1,18 @@
 @font-face {
-  font-family: 'IRANSansWeb';
-  font-style: normal;
-  font-weight: normal;
-  src: url('./assets/font/iranyekanwebregular(fanum).eot'),
-     url('./assets/font/iranyekanwebregular(fanum).woff2') format('woff2'), 
-     url('./assets/font/iranyekanwebregular(fanum).woff') format('woff'), 
-     url('./assets/font/iranyekanwebregular(fanum).ttf') format('truetype');
-}
-
+     font-family: 'IRANSansWeb';
+     font-style: normal;
+     font-weight: normal;
+     src: url('./assets/font/iranyekanwebregular(fanum).eot'),
+        url('./assets/font/iranyekanwebregular(fanum).woff2') format('woff2'), 
+        url('./assets/font/iranyekanwebregular(fanum).woff') format('woff'), 
+        url('./assets/font/iranyekanwebregular(fanum).ttf') format('truetype');
+   }
+   
 
 
 *{
-  font-family: "IRANSansWeb";
-  direction: rtl;
-  text-align: right;
-  text-decoration: none !important;
+     font-family: "IRANSansWeb";
+     direction: rtl;
+     text-align: right;
+     text-decoration: none !important;
 }
