@@ -1,0 +1,3 @@
+.table th:not([align]) {
+     text-align: right;
+ }
