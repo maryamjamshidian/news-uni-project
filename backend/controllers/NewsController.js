@@ -5,7 +5,10 @@ import Category from "../models/categoryModel.js";
 import Users from "../models/userModel.js";
 export const getNews = async (req, res) => {
   try {
-    const news = await News.findAll({});
+    const news = await News.findAll({  
+include:[Users]
+
+    });
     res.json(news);
   } catch (error) {
     console.log(error);
@@ -192,7 +195,7 @@ export const popularNews = async(req,res)=>{
       include: [{
         model: Users,
         attributes: ['id', 'name', 'email', 'url']
-      }]
+      }] 
     })
     res.json(news);
   } catch (error) {
