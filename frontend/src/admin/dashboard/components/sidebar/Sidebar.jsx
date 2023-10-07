@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 const Sidebar = () => {
   const [showNews, setShowNews] = useState(false);
+  const [showCategory, setShowCategory] = useState(false);
 
   return (
     <div className="sidebar">
@@ -16,7 +17,7 @@ const Sidebar = () => {
           <Link to="/dashboard">داشبورد</Link>
         </li>
         <li>
-          <span onClick={()=> setShowNews(!showNews)}>اخبار</span>
+          <span onClick={() => setShowNews(!showNews)}>اخبار</span>
 
           {showNews && (
             <ul>
@@ -30,7 +31,18 @@ const Sidebar = () => {
           )}
         </li>
         <li>
-          <Link to="">دسته بندی</Link>
+          <span onClick={() => setShowCategory(!showCategory)}>دسته بندی ها</span>
+
+          {showCategory && (
+            <ul>
+              <li>
+                <Link to="/add-category">افزودن دسته بندی</Link>
+              </li>
+              <li>
+                <Link to="/view-category">مشاهده دسته بندی</Link>
+              </li>
+            </ul>
+          )}
         </li>
         <li>
           <Link to="">ویدیو</Link>
