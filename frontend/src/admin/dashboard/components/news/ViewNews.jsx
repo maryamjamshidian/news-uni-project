@@ -51,7 +51,7 @@ const ViewNews = () => {
                 </td>
                 <td>{item?.user?.name}</td>
                 <td>
-                  <button className="button is-success">ویرایش</button>
+                  <Link state={item} to={`/edit-news/${item.id}`} className="button is-info">ویرایش</Link>
                 </td>
                 <td>
                   <button
