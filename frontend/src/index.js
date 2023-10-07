@@ -7,11 +7,8 @@ import { AuthContextProvider } from './admin/context/context';
 import axios from 'axios';
 import { BrowserRouter } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
-
 axios.defaults.withCredentials = true;
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
-
 
 root.render(
   <React.StrictMode>
