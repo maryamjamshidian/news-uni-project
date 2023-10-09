@@ -3,9 +3,14 @@ import "./sidebar.css";
 import logo from "../../../../assets/images/logo.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/context";
 const Sidebar = () => {
   const [showNews, setShowNews] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const [showUsers, setShowUsers] = useState(false)
+  const {Logout} = useContext(AuthContext)
 
   return (
     <div className="sidebar">
@@ -31,7 +36,9 @@ const Sidebar = () => {
           )}
         </li>
         <li>
-          <span onClick={() => setShowCategory(!showCategory)}>دسته بندی ها</span>
+          <span onClick={() => setShowCategory(!showCategory)}>
+            دسته بندی ها
+          </span>
 
           {showCategory && (
             <ul>
@@ -45,16 +52,42 @@ const Sidebar = () => {
           )}
         </li>
         <li>
-          <Link to="">ویدیو</Link>
+          <span onClick={() => setShowVideo(!showVideo)}>
+            ویدیو
+          </span>
+
+          {showVideo && (
+            <ul>
+              <li>
+                <Link to="/add-video">افزودن ویدیو</Link>
+              </li>
+              <li>
+                <Link to="/view-video">نمایش ویدیو</Link>
+              </li>
+            </ul>
+          )}
         </li>
         <li>
-          <Link to="">کاربران</Link>
+        <span onClick={() => setShowUsers(!showUsers)}>
+            کاربران
+          </span>
+
+          {showUsers && (
+            <ul>
+              <li>
+                <Link to="/add-user">افزودن کاربر</Link>
+              </li>
+              <li>
+                <Link to="/view-users">نمایش کاربران</Link>
+              </li>
+            </ul>
+          )}
         </li>
         <li>
           <Link to="">نظرات</Link>
         </li>
         <li>
-          <Link to="">خروج</Link>
+          <span onClick={Logout}>خروج</span>
         </li>
       </ul>
     </div>
