@@ -19,11 +19,18 @@ export const AuthContextProvider = ({ children }) => {
   const [news, setNews] = useState([]);
   const [singlePost, setSinglePost] = useState([]);
   const [category, setCategory] = useState([]);
+  const [errorVideo, setErrorVideo] = useState("")
+  const [allVideo, setAllVideo] = useState([])
+  const [resgisterError, setRegisterError] = useState("")
+  const [users, setUsers] = useState([])
+  const [profilePhoto, setProfilePhoto] = useState("")
+  const [profileName,setProfileName] = useState("")
 
   const navigate = useNavigate();
 
   useEffect(() => {
     refreshToken();
+    profile()
   }, []);
   const refreshToken = async () => {
     try {
@@ -61,6 +68,29 @@ export const AuthContextProvider = ({ children }) => {
     }
   );
 
+  const register = async(inputs) => {
+    try {
+      const res = await axiosJWT.post(`${baseUrl}/api/users/register`, inputs, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      if(res.data.error){
+        setRegisterError(res.data.error)
+      }else{
+        toast.success(res.data.message, {
+          position: "bottom-center",
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+        navigate("/view-users");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const login = async (inputs) => {
     try {
       const res = await axios.post(
@@ -82,6 +112,7 @@ export const AuthContextProvider = ({ children }) => {
         setToken(res.data.accessToken);
         setAdmin(res.data.isAdmin);
       }
+      profile()
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +125,7 @@ export const AuthContextProvider = ({ children }) => {
           authorization: `Bearer ${token}`,
         },
       });
-      console.log(res);
+      setUsers(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -275,6 +306,160 @@ export const AuthContextProvider = ({ children }) => {
     }
   }
 
+  // video 
+
+  const createVideo = async(data) => {
+    const formData = new FormData();
+    formData.append("file", data.file)
+    try {
+      const res = await axiosJWT.post(`${baseUrl}/api/create-video`, formData,{
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      if(res.data.error){
+        setErrorVideo(res.data.error)
+      }
+     if(res.data.msg){
+      toast.success(res.data.msg, {
+        position: "bottom-center",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+      navigate("/view-video");
+     }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getAllVideo = async() => {
+    try {
+      const res = await axiosJWT.get(`${baseUrl}/api/get-video`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      setAllVideo(res.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const deleteVideo = async(id)=>{
+    try {
+        const res = await axiosJWT.delete(`${baseUrl}/api/delete-video/${id}`, {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        })
+        toast.success(res.data.msg, {
+          position: "bottom-center",
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+        getAllVideo()
+        
+    } catch (error) {
+      console.log(error);
+    }
+  }
+// Use api
+
+  const updataUser = async(value)=>{
+    try {
+      const res = await axiosJWT.put(`${baseUrl}/api/users/${value.id}`, value,{
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      toast.success(res.data.message, {
+        position: "bottom-center",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+      navigate("/view-users");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const deleteUser = async(id)=> {
+    try {
+      const res = await axiosJWT.delete(`${baseUrl}/api/users/${id}`,{
+        headers:{
+          authorization: `Bearer ${token}`
+        }
+      })
+      toast.success(res.data.message, {
+        position: "bottom-center",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+      getAllUsers()
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  const Logout = async()=> {
+    try {
+      const res = await axiosJWT.delete(`${baseUrl}/api/users/logout`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      navigate("/")
+      toast.success(res.data, {
+        position: "bottom-center",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const updateProfile = async(data)=> {
+    try {
+      const formData = new FormData();
+      formData.append("name", data.name)
+      formData.append("password", data.password)
+      formData.append("confPassword", data.confPassword)
+      formData.append("id", data.id)
+      formData.append("file", data.file)
+      const res = await axiosJWT.put(`${baseUrl}/api/users/profile/${data.id}`, formData, {
+        headers:{
+          authorization: `Bearer ${token}`
+        }
+      })
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const profile = async () => {
+    try {
+      const res = await axiosJWT.get(`${baseUrl}/api/users/profile`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      setProfilePhoto(res.data.url);
+      setProfileName(res.data.name)
+     
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -294,7 +479,23 @@ export const AuthContextProvider = ({ children }) => {
         getCategory,
         category,
         updateCategory,
-        deleteCategory
+        deleteCategory,
+        createVideo,
+        errorVideo,
+        getAllVideo,
+        allVideo,
+        deleteVideo,
+        register,
+        resgisterError,
+        users,
+        updataUser,
+        deleteUser,
+        Logout,
+        userId,
+        updateProfile,
+        profile,
+        profilePhoto,
+        profileName
       }}
     >
       {children}
