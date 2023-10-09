@@ -13,7 +13,7 @@ export const getAlllVideo = async(req, res)=> {
 
 export const createVideo = async(req,res)=>{
     
-         if(req.files == null) return res.json({nsg: "ویدیو انتخاب نکردید"}) 
+         if(req.files == null) return res.json({msg: "ویدیو انتخاب نکردید"}) 
          const file = req.files.file;
          const fileSize = file.data.length;
          const ext = path.extname(file.name);

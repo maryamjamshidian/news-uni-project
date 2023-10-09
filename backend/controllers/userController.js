@@ -1,11 +1,11 @@
 import Users from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import path from "path"
+import path from "path";
 import fs from "fs";
 export const getAllUsers = async (req, res) => {
   try {
-    const users =  await Users.findAll({});
+    const users = await Users.findAll({});
     res.json(users);
   } catch (error) {
     console.log(error);
@@ -13,17 +13,26 @@ export const getAllUsers = async (req, res) => {
 };
 
 export const Register = async (req, res) => {
-  const { name, email, password, confPassword, isAdmin } = req.body;
+  const {
+    name,
+    email,
+    password,
+    confPassword,
+    isAdmin
+  } = req.body;
   if (password !== confPassword) {
-    return res.json("پسورد و تکرار آن باهم برابر نیست");
+    return res.json({error: "پسوورد و تکرار آن با هم برابر نیست."});
   }
   const salt = await bcrypt.genSalt();
   const hashPassword = await bcrypt.hash(password, salt);
-
   try {
-    const found = await Users.findOne({ where: { email: email } });
+    const found = await Users.findOne({
+      where: {
+        email: email
+      }
+    });
     if (found) {
-      return res.json("ایمیل قبلا ثبت شده");
+      return res.json({error: "ایمیل قبلا ثبت نام کرده است"});
     }
     await Users.create({
       name: name,
@@ -31,9 +40,9 @@ export const Register = async (req, res) => {
       password: hashPassword,
       isAdmin: isAdmin,
     });
-    res.json("ثبت نام موفقیت آمیر بود");
-    // console.log(name, email, password, confPassword, isAdmin);
-    // res.json("register");
+    res.json({
+      message: "ثبت نام موفقیت آمیز بود"
+    });
   } catch (error) {
     console.log(error);
   }
@@ -46,56 +55,73 @@ export const Login = async (req, res) => {
         email: req.body.email,
       },
     });
-    // res.json(user);
+    
     const match = await bcrypt.compare(req.body.password, user[0].password);
     if (!match) {
-      return res.json({ error: "پسورد اشتباه است" });
+      return res.json({
+        error: "پسوورد اشتباه است"
+      });
     }
-
-
     const userId = user[0].id;
     const name = user[0].name;
     const email = user[0].email;
     const isAdmin = user[0].isAdmin;
-    const accessToken = jwt.sign(
-      { userId, name, email, isAdmin },
-      process.env.ACCESS_TOKEN_SECRET,{
-           expiresIn: "45s"
+    const accessToken = jwt.sign({
+        userId,
+        name,
+        email,
+        isAdmin
+      },
+      process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "45s"
       }
     );
-    const refreshToken = jwt.sign(
-      { userId, name, email, isAdmin },
-      process.env.REFRESH_TOKEN_SECRET,{
-           expiresIn : "1d"
-      }
-     )
-     await Users.update({refresh_token: refreshToken},{
-      where: {
-           id: userId,
-      }
- })
 
- res.cookie("refreshToken", refreshToken,{
-  httpOnly: true,
-  maxAge: 24 * 60 * 60 * 1000
-})
-    res.json({ 
-      userId,
-       name,
+    const refreshToken = jwt.sign({
+        userId,
+        name,
         email,
-         isAdmin,
-         accessToken,
+        isAdmin
+      },
+      process.env.REFRESH_TOKEN_SECRET, {
+        expiresIn: "1d"
+      }
+    )
 
-          msg: "شما با موفقیت وارد شدید" });
+    await Users.update({
+      refresh_token: refreshToken
+    }, {
+      where: {
+        id: userId,
+      }
+    })
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000
+    })
+
+    res.json({
+      userId,
+      name,
+      email,
+      isAdmin,
+      accessToken,
+      msg: "شما با موفقیت وارد شدید"
+    });
   } catch (error) {
-    res.json({ error: " کاربر وجود ندارد" });
+    res.json({
+      error: "کاربر وجود ندارد"
+    });
   }
 };
+
+
 export const Logout = async(req,res)=> {
   try {
     const refreshToken = req.cookies.refreshToken;
     if(!refreshToken) return res.json("توکن پیدا نشد")
-    const user = await Users.findOne({refresh_token: refreshToken});
+    const user = await Users.findOne({where:{refresh_token: refreshToken}});
     if(!user) return res.json("کاربر پیدا نشد")
     const clr = null;
     await Users.update({
@@ -133,7 +159,6 @@ export const deleteUser = async(req, res)=>{
 }
 
 
-
 export const updateUser = async (req,res) =>{
   const {name, email, password, confPassword, isAdmin} = req.body;
   if(password !== confPassword){
@@ -153,16 +178,12 @@ export const updateUser = async (req,res) =>{
         id: req.body.id
       }
     })
-
-
     res.json({message: "ویرایش موفقیت آمیز بود"})
 
   } catch (error) {
     console.log(error);
   }
 }
-
-
 
 export const updateProfile = async(req,res)=>{
   const avatar = await Users.findOne({
@@ -221,6 +242,7 @@ export const updateProfile = async(req,res)=>{
   }
 
 }
+
 
 export const Profile = async(req,res)=>{
   try {
