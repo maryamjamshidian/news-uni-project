@@ -1,10 +1,15 @@
 import React from 'react'
 import "./information.css";
 import { Link } from 'react-router-dom';
-import profile from "../../../../assets/images/profile.png"
+import profileImg from "../../../../assets/images/profile.png"
 import { BsFillCapslockFill,BsFillPersonPlusFill,BsChatDots } from "react-icons/bs";
+import { useContext } from 'react';
+import { AuthContext } from '../../../context/context';
+import { useEffect } from 'react';
 
 const Information = () => {
+  const {userId,profile,profilePhoto} = useContext(AuthContext)
+
   return (
     <div className="information">
       <div className="view-web is-flex is-align-items-center is-justify-content-space-between mb-5">
@@ -13,8 +18,8 @@ const Information = () => {
         </div>
         <div className="view-profile">
           <span>
-            <Link to="/">
-              <img src={profile} alt="" className='image profile-photo' />
+            <Link to={`/update-profile/${userId}`}>
+              <img src={profilePhoto ? profilePhoto : profileImg} alt="" className='image profile-photo' />
             </Link>
           </span>
         </div>
