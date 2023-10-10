@@ -15,12 +15,24 @@ import ViewUsers from "./admin/dashboard/components/users/ViewUsers";
 import AddUsers from "./admin/dashboard/components/users/AddUsers";
 import EditUsers from "./admin/dashboard/components/users/EditUsers";
 import ProfileUpdate from "./admin/dashboard/components/users/ProfileUpdate";
+import HomeScreen from "./pages/HomeScreen";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Detail from "./pages/Detail";
 
 function App() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="/detail/:id" element={<Detail />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/administrator" element={<Login />}  />
+
+
+
+       
         <Route path="/dashboard" element={<Main />} />
         <Route path="/add-news" element={<AddNews />} />
         <Route path="/view-news" element={<ViewNews />} />
