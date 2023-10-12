@@ -3,11 +3,11 @@ import path from "path";
 import fs from "fs";
 import Category from "../models/categoryModel.js";
 import Users from "../models/userModel.js";
+
 export const getNews = async (req, res) => {
   try {
-    const news = await News.findAll({  
-include:[Users]
-
+    const news = await News.findAll({
+      include: [Users]
     });
     res.json(news);
   } catch (error) {
@@ -190,12 +190,12 @@ export const getDetailNews = async(req,res)=>{
 export const popularNews = async(req,res)=>{
   try {
     const news = await News.findAll({
-      limit: 4,
+      limit: 3,
       order: [["numViews", "DESC"]],
       include: [{
         model: Users,
         attributes: ['id', 'name', 'email', 'url']
-      }] 
+      }]
     })
     res.json(news);
   } catch (error) {
@@ -211,11 +211,13 @@ export const getCatNews = async(req, res)=>{
     
     const news = hasCategory ?
       await News.findAll({
+        limit: 4,
         where: {catId: hasCategory},
         order: ["id", "DESC"]
       })
     :
     await News.findAll({
+      limit: 4,
       order: ["id", "DESC"]
     })
 

@@ -1,25 +1,44 @@
-import React from 'react'
-import Img from "../../../assets/images/1.jpeg"
-import Comment from '../Comment/Comment'
-import "./content.css"
-const Content = () => {
+import React from "react";
+import Img from "../../../assets/images/1.jpeg";
+import Comment from "../Comment/Comment";
+import "./content.css";
+const Content = ({ data }) => {
+  console.log(data);
   return (
     <div className="content-detail">
-         <div className="detail-image">
-              <img src={Img} alt="" />
-         </div>
-         <div className="detail-title">
-              <h1 className='title mt-5'>تست تایتل خبر</h1>
-         </div>
-         <div className="detail-description">
-              <p className='description mt-5'>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
-         </div>
+      <div className="detail-image">
+        <img src={data.url} alt="" />
+      </div>
+      <div className="detail-title">
+        <h1 className="title mt-5">{data.title}</h1>
+      </div>
+      <div className="detail-description">
+        <p className="description mt-5">{data.desc}</p>
+      </div>
 
-         <div className="comment">
-              <Comment />
-         </div>
+      <div className="author">
+        <div className="box p-5 mt-6">
+          <article className="media is-align-items-center is-flex">
+               <div className="title is-size-6">نویسنده : </div>
+            <div className="media-left">
+              <figure className="image is-64x64">
+                <img src={data?.user?.url} alt="Image" />
+              </figure>
+            </div>
+            <div className="media-content pr-3">
+              <div className="content">
+                <p>{data?.user?.name}</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div className="comment">
+        <Comment />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Content
+export default Content;

@@ -9,13 +9,22 @@ export const getCategory = async(req,res)=> {
      }
 }
 
+export const getCategoryHome = async(req,res)=> {
+     try {
+          const categories = await Category.findAll({});
+          res.json(categories)
+     } catch (error) {
+          console.log(error);
+     }
+}
+
 export const createCategory = async(req,res) => {
           const name = req.body.name;
      try {
           await Category.create({
                name: name,
           })
-          res.json("دسته بندی افزوده شد")
+          res.json({msg: "دسته بندی افزوده شد"})
      } catch (error) {
           console.log(object);
      }
