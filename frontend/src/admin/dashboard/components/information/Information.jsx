@@ -8,7 +8,7 @@ import { AuthContext } from '../../../context/context';
 import { useEffect } from 'react';
 
 const Information = () => {
-  const {userId,profile,profilePhoto} = useContext(AuthContext)
+  const {userId,profile,profilePhoto, news,users,comments} = useContext(AuthContext)
 
   return (
     <div className="information">
@@ -27,17 +27,17 @@ const Information = () => {
       <div className="info">
           <div className="info-item">
             <h4>خبرها</h4>
-            <span>16</span>
+            <span>{news.length}</span>
             <BsFillCapslockFill />
           </div>
           <div className="info-item">
             <h4>کاربران</h4>
-            <span>8</span>
+            <span>{users.length}</span>
             <BsFillPersonPlusFill />
           </div>
           <div className="info-item">
             <h4>نظرات</h4>
-            <span>120</span>
+            <span>{comments.length}</span>
             <BsChatDots />
           </div>
       </div>

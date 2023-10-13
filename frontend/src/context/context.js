@@ -1,5 +1,6 @@
 import { createContext, useEffect, useReducer } from "react";
 import { videoReducer } from "./reducers/reducerVideo";
+import {toast} from "react-toastify"
 import {
   VIDEO_FAIL,
   VIDEO_REQUEST,
@@ -20,7 +21,7 @@ import {
   CATEGORY_POST_REQUEST,
   CATEGORY_POST_SUCCESS,
 } from "./constants/categoryConstants";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { popularNewsReducer } from "./reducers/reducerPopular";
 import {
   POPULAR_NEWS_FAIL,
@@ -51,6 +52,7 @@ const INITIAL_STATE_POPULAR_NEWS = {
 };
 
 export const HomeContextProvider = ({ children }) => {
+  const navigate = useNavigate()
   const [state, dispatch] = useReducer(videoReducer, INITIAL_STATE);
   const [stateLastNews, lastNewsDispatch] = useReducer(
     lastNewsReducer,
@@ -65,6 +67,7 @@ export const HomeContextProvider = ({ children }) => {
     INITIAL_STATE_POPULAR_NEWS
   );
   const [category, setCategory] = useState([]);
+  const [newsComment,setNewsComment] = useState([])
 
   const cat = useLocation().search;
 
@@ -101,6 +104,9 @@ export const HomeContextProvider = ({ children }) => {
     }
   };
 
+
+
+
   const LoadCatPost = async () => {
     try {
       catPostDispatch({ type: CATEGORY_POST_REQUEST });
@@ -127,7 +133,14 @@ export const HomeContextProvider = ({ children }) => {
       });
     }
   };
-
+  const LoadView = async(id)=> {
+    try {
+      const res = await axios.get(`${baseUrl}/api/news/detail/${id}`)
+      LoadMostPopular()
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const LoadCategory = async () => {
     try {
       const res = await axios.get(`${baseUrl}/api/category/home`);
@@ -138,7 +151,42 @@ export const HomeContextProvider = ({ children }) => {
   };
 
   const createComment = async(data) => {
-console.log(data);
+      try {
+        const res = await axios.post(`${baseUrl}/api/comment`, data)
+        toast.success(res.data, {
+          position: "bottom-center",
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+  }
+  const getSingleComment = async(id) => {
+   try {
+    const res = await axios.get(`${baseUrl}/api/comment/${id}`)
+    setNewsComment(res.data)
+   } catch (error) {
+     console.log(error);
+   }
+  }
+
+
+  const handleEmail = async(data) => {
+    try {
+      const res = await axios.post(`${baseUrl}/api/send-email`,data)
+      toast.success(res.data, {
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+      navigate("/")
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -159,7 +207,11 @@ console.log(data);
 
         category,
         LoadCatPost,
-        createComment
+        createComment,
+        getSingleComment,
+        newsComment,
+        LoadView,
+        handleEmail
       }}
     >
       {children}

@@ -10,7 +10,14 @@ const Comment = () => {
      const [subject, setSubject] = useState("")
 
      const {id} = useParams()
-     const newsId = id
+     const newsId = id;
+
+     const reset = () => {
+          setName("")
+          setEmail("")
+          setDescription("")
+          setSubject("")
+     }
 
      const handleSubmit = (e) => {
           e.preventDefault();
@@ -22,6 +29,7 @@ const Comment = () => {
                email
           }
           createComment(data)
+          reset()
      }
 
   return (
@@ -30,23 +38,27 @@ const Comment = () => {
          <form onSubmit={handleSubmit}>
          <div className="field">
               <textarea className='textarea' placeholder='نظر شما'
+              value={description}
                onChange = {(e) => setDescription(e.target.value)}
               ></textarea>
          </div>
          <div className="columns">
               <div className="column">
                    <input type="text" className="input" placeholder='نام شما'
+                   value={name}
                    onChange={(e) => setName(e.target.value)}
                    />
               </div>
               <div className="column">
                    <input type="text" className="input" placeholder='ایمیل'
+                    value={email}
                    onChange={(e) => setEmail(e.target.value)}
                    />
               </div>
          </div>
          <div className="field">
               <input type="text" className="input" placeholder='موضوع'
+               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               />
          </div>

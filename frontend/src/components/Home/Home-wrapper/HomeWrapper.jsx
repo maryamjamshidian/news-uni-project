@@ -6,9 +6,11 @@ import { useContext } from 'react'
 import { HomeContext } from '../../../context/context'
 import Loader from '../../Loading/Loader'
 import moment from "jalali-moment"
+import { Link } from 'react-router-dom'
 
 const HomeWrapper = () => {
   const {videos, loading, error,loadingLastNews,errorLastNews,lastNews} = useContext(HomeContext)
+
   return (
     <div className="home-wrapper">
       <div className="container">
@@ -26,7 +28,8 @@ const HomeWrapper = () => {
                     lastNews.map((news)=> {
                       return (
                         <div className="right-side-top" key={news.id}>
-                        <div className="right-side-img">
+                          <Link state={news} to={`/detail/${news.id}`}>
+                          <div className="right-side-img">
                           <div className="overlay"></div>
                           <img src={news.url} alt="" />
                         </div>
@@ -37,6 +40,7 @@ const HomeWrapper = () => {
                           <div className="post-title">{news.title}</div>
                           <div className="post-date">{moment(news.createdAt).locale("fa").format("YYYY-MM-DD")}</div>
                         </div>
+                          </Link>
                       </div>
                       )
                     })

@@ -157,7 +157,12 @@ export const getLastNews = async(req,res)=>{
     const news = await News.findAll({
       limit: 2,
       order: [["id", "DESC"]],
-      include: [Category]
+      include: [{
+        model: Users,
+        attributes: ['id', 'name', 'email', 'url']
+      },{
+        model: Category
+      }]
     })
     res.json(news)
   } catch (error) {
@@ -213,12 +218,20 @@ export const getCatNews = async(req, res)=>{
       await News.findAll({
         limit: 4,
         where: {catId: hasCategory},
-        order: ["id", "DESC"]
+        order: ["id", "DESC"],
+        include: [{
+          model: Users,
+          attributes: ['id', 'name', 'email', 'url']
+        }]
       })
     :
     await News.findAll({
       limit: 4,
-      order: ["id", "DESC"]
+      order: ["id", "DESC"],
+      include: [{
+        model: Users,
+        attributes: ['id', 'name', 'email', 'url']
+      }]
     })
 
     res.json(news)

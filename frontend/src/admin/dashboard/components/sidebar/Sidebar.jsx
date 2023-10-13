@@ -9,8 +9,8 @@ const Sidebar = () => {
   const [showNews, setShowNews] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
-  const [showUsers, setShowUsers] = useState(false)
-  const {Logout} = useContext(AuthContext)
+  const [showUsers, setShowUsers] = useState(false);
+  const { Logout, admin } = useContext(AuthContext);
 
   return (
     <div className="sidebar">
@@ -35,56 +35,60 @@ const Sidebar = () => {
             </ul>
           )}
         </li>
-        <li>
-          <span onClick={() => setShowCategory(!showCategory)}>
-            دسته بندی ها
-          </span>
 
-          {showCategory && (
-            <ul>
-              <li>
-                <Link to="/add-category">افزودن دسته بندی</Link>
-              </li>
-              <li>
-                <Link to="/view-category">مشاهده دسته بندی</Link>
-              </li>
-            </ul>
-          )}
-        </li>
-        <li>
-          <span onClick={() => setShowVideo(!showVideo)}>
-            ویدیو
-          </span>
+        {admin ? (
+          <>
+            <li>
+              <span onClick={() => setShowCategory(!showCategory)}>
+                دسته بندی ها
+              </span>
 
-          {showVideo && (
-            <ul>
-              <li>
-                <Link to="/add-video">افزودن ویدیو</Link>
-              </li>
-              <li>
-                <Link to="/view-video">نمایش ویدیو</Link>
-              </li>
-            </ul>
-          )}
-        </li>
-        <li>
-        <span onClick={() => setShowUsers(!showUsers)}>
-            کاربران
-          </span>
+              {showCategory && (
+                <ul>
+                  <li>
+                    <Link to="/add-category">افزودن دسته بندی</Link>
+                  </li>
+                  <li>
+                    <Link to="/view-category">مشاهده دسته بندی</Link>
+                  </li>
+                </ul>
+              )}
+            </li>
+            <li>
+              <span onClick={() => setShowVideo(!showVideo)}>ویدیو</span>
 
-          {showUsers && (
-            <ul>
-              <li>
-                <Link to="/add-user">افزودن کاربر</Link>
-              </li>
-              <li>
-                <Link to="/view-users">نمایش کاربران</Link>
-              </li>
-            </ul>
-          )}
-        </li>
+              {showVideo && (
+                <ul>
+                  <li>
+                    <Link to="/add-video">افزودن ویدیو</Link>
+                  </li>
+                  <li>
+                    <Link to="/view-video">نمایش ویدیو</Link>
+                  </li>
+                </ul>
+              )}
+            </li>
+            <li>
+              <span onClick={() => setShowUsers(!showUsers)}>کاربران</span>
+
+              {showUsers && (
+                <ul>
+                  <li>
+                    <Link to="/add-user">افزودن کاربر</Link>
+                  </li>
+                  <li>
+                    <Link to="/view-users">نمایش کاربران</Link>
+                  </li>
+                </ul>
+              )}
+            </li>
+          </>
+        ) : (
+          ""
+        )}
+
         <li>
-          <Link to="">نظرات</Link>
+          <Link to="/comment">نظرات</Link>
         </li>
         <li>
           <span onClick={Logout}>خروج</span>

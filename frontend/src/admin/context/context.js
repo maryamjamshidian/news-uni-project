@@ -25,9 +25,14 @@ export const AuthContextProvider = ({ children }) => {
   const [users, setUsers] = useState([])
   const [profilePhoto, setProfilePhoto] = useState("")
   const [profileName,setProfileName] = useState("")
-
+  const [comments, setComments] = useState([])
   const navigate = useNavigate();
-
+  useEffect(()=> {
+    getAllUsers()
+    getAllComment()
+    handleNews()
+    console.log("test");
+  }, [])
   useEffect(() => {
     refreshToken();
     profile()
@@ -460,6 +465,86 @@ export const AuthContextProvider = ({ children }) => {
     }
   }
 
+
+  // comments
+  const getAllComment = async()=> {
+    try {
+      const res = await axiosJWT.get(`${baseUrl}/api/comment`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      setComments(res.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const deleteComment = async(id)=> {
+    try {
+      const res = await axiosJWT.delete(`${baseUrl}/api/comment/${id}`,{
+        headers:{
+          authorization : `Bearer ${token}`
+        }
+      })
+      toast.success(res.data, {
+        position: "bottom-center",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+      getAllComment()
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const activeComment = async(id) => {
+    const data = {
+      isActive: true
+    }
+    try {
+      const res = await axiosJWT.put(`${baseUrl}/api/comment/active/${id}`,data,{
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      getAllComment()
+      toast.success(res.data, {
+        position: "bottom-center",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const unActiveComment = async(id) => {
+    const data = {
+      isActive: false
+    }
+    try {
+      const res = await axiosJWT.put(`${baseUrl}/api/comment/unactive/${id}`,data,{
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      getAllComment()
+      toast.success(res.data, {
+        position: "bottom-center",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
   return (
     <AuthContext.Provider
       value={{
@@ -495,7 +580,13 @@ export const AuthContextProvider = ({ children }) => {
         updateProfile,
         profile,
         profilePhoto,
-        profileName
+        profileName,
+        getAllComment,
+        comments,
+        deleteComment,
+        activeComment,
+        unActiveComment,
+        admin
       }}
     >
       {children}

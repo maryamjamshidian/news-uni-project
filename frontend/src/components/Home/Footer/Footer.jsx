@@ -8,11 +8,11 @@ const Footer = () => {
   return (
   <footer className="mt-6 pt-6 pb-6">
     <div className="container pt-6 pb-6">
-      <div className="columns">
+      <div className="columns is-justify-content-space-between">
         <div className="column is-one-third">
           <img src={travel} width="270" alt="" />
         </div>
-        <div className="column is-one-third">
+        {/* <div className="column is-one-third">
           <h1 className="subtitle has-text-white mb-5">محبوب ترین خبرها</h1>
           <ul>
             <li className='mt-4'>
@@ -32,7 +32,7 @@ const Footer = () => {
               </div>
             </li>
           </ul>
-        </div>
+        </div> */}
         <div className="column is-one-third">
           <div className="footer-logo">
             <img src={logo} alt="" />

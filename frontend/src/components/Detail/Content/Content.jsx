@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Img from "../../../assets/images/1.jpeg";
 import Comment from "../Comment/Comment";
 import "./content.css";
+import { HomeContext } from "../../../context/context";
+import { useParams } from "react-router-dom";
 const Content = ({ data }) => {
-  console.log(data);
+  const {getSingleComment,LoadView} = useContext(HomeContext)
+  const {id} = useParams()
+  useEffect(()=> {
+    getSingleComment(id)
+    LoadView(id)
+  }, [])
   return (
     <div className="content-detail">
       <div className="detail-image">
