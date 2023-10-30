@@ -1,5 +1,5 @@
 import React from 'react'
-import travel from "../../../assets/images/traveling.jpg"
+import travel from "../../../assets/images/traveling.png"
 import newsImg from "../../../assets/images/1.jpeg"
 import logo from "../../../assets/images/logo.png"
 import {Link} from "react-router-dom"
@@ -46,12 +46,12 @@ const Footer = () => {
           </div>
           <div className="footer-address pt-6">
             <p>
-            ایران فارس شیراز سمت راست طبقه هشتم واحد ششم
-            </p>
+
+ایران اصفهان             </p>
           </div>
           <div className="footer-phone pt-6">
             <p>
-              تلفن : 0987654321
+              تلفن : 09389706771
             </p>
           </div>
         </div>

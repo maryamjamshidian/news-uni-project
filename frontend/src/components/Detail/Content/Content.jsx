@@ -12,9 +12,9 @@ const Content = ({ data }) => {
     LoadView(id)
   }, [])
   return (
-    <div className="content-detail">
-      <div className="detail-image">
-        <img src={data.url} alt="" />
+    <div className="content-detail" >
+      <div className="detail-image" >
+        <img src={data.url} alt=""  />
       </div>
       <div className="detail-title">
         <h1 className="title mt-5">{data.title}</h1>

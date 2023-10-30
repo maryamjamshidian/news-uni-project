@@ -14,13 +14,13 @@ const Detail = () => {
 
     <div className="detail-post mt-6">
          <div className="container">
-              <div className="columns">
-                   <div className="column is-two-thirds">
+              <div className="column ">
+                   <div >
                         <Content data={state} />
                    </div>
-                   <div className="column is-one-third">
+                   {/* <div className="column is-one-third"> 
                         <SideLeft />
-                   </div>
+                   </div> */}
               </div>
          </div>
     </div>

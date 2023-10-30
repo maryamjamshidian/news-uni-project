@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import popularImg from "../../../assets/images/1.jpeg";
 import { BsEye } from "react-icons/bs";
-import travel from "../../../assets/images/traveling.jpg";
+import travel from "../../../assets/images/traveling.png";
 import "./popular.css";
 import { useContext } from "react";
 import { HomeContext } from "../../../context/context";

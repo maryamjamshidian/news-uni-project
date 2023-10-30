@@ -12,12 +12,12 @@ const TopMenu = () => {
             <div className="column is-two-thirds is-flex is-justify-content-start">
               <span className="has-text-white is-flex is-align-items-center">
                 <BsReception4 className="ml-2 has-text-danger" /> برقراری ارتباط
-                : Example@gmail.com
+                : marryam.jam@gmail.com
               </span>
             </div>
             <div className="column is-one-third is-flex is-justify-content-end">
               <span className="has-text-white is-flex is-align-items-center is-size-5">
-                <BsFillTelephoneFill className="ml-2" /> 097123456576
+                <BsFillTelephoneFill className="ml-2" /> 09389706771
               </span>
             </div>
           </div>
